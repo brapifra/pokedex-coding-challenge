@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PokeCard from '../../components/PokeCard';
 import Fetch from '../../hocs/Fetch';
 
 interface Props {
@@ -11,7 +12,7 @@ class App extends React.Component<Props> {
       <div>
         {
           this.props.data.results.map((p: any) => {
-            return <div key={p.name}>{p.name}</div>;
+            return <PokeCard key={p.name} url={p.url} name={p.name} />
           })
         }
       </div>
