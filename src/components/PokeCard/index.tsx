@@ -1,16 +1,11 @@
 import * as React from 'react';
 import { Card } from 'antd';
-import LoadingComponent from '../LoadingComponent';
+import Fetch from '../Fetch';
 import styled from 'styled-components';
 
 interface Props {
   url: any;
-  name?: string;
-}
-
-interface State {
-  loading: any;
-  data?: any;
+  name: string;
 }
 
 const ImageCard = styled.img`
@@ -18,25 +13,28 @@ const ImageCard = styled.img`
   height: 100%;
 `;
 
-class PokeCard extends React.Component<Props, State> {
-  public state: State = {
-    loading: true,
-  }
-  public async componentDidMount() {
-    const res = await fetch(this.props.url);
-    const data = await res.json();
-    this.setState({ data });
-  }
+class PokeCard extends React.Component<Props> {
   public render() {
-    const { data } = this.state;
     const { name } = this.props;
     return (
       <Card>
-        <LoadingComponent loading={this.state.loading}>
-          <ImageCard src={data ? data.sprites.front_default : ""} onLoad={this.onImageLoad} />
-        </LoadingComponent>
+        <Fetch url={this.props.url}>
+          {
+            (data, error) => {
+              if (error) {
+                return <div>{JSON.stringify(error)}</div>;
+              }
+              return (
+                <ImageCard
+                  src={data.sprites.front_default}
+                  onLoad={this.onImageLoad}
+                />
+              );
+            }
+          }
+        </Fetch>
         <span>
-          {data ? data.name : (name || "Loading Pokemon...")}
+          {name}
         </span>
       </Card>
     );

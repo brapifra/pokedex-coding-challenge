@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Layout } from 'antd';
-import LoadingComponent from '../../components/LoadingComponent';
+import Fetch from '../../components/Fetch';
 import PokeCard from '../../components/PokeCard';
 import styled from 'styled-components';
 
@@ -34,11 +34,6 @@ class App extends React.Component<any, State> {
     data: JSON.parse(localStorage.getItem("pokemons") || "{}"),
     loading: true
   }
-  public async componentDidMount() {
-    const res = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=15');
-    const data = await res.json();
-    this.setState({ data, loading: false });
-  }
   public render() {
     return (
       <Layout>
@@ -47,23 +42,26 @@ class App extends React.Component<any, State> {
         </Header>
         <Content>
           <Body>
-            <LoadingComponent loading={this.state.loading}>
-              <Grid>
-                {this.state.data && this.state.data.results ?
-                  this.state.data.results.map((p: any) => {
-                    return <PokeCard key={p.name} url={p.url} name={p.name} />
-                  })
-                  :
-                  null
+            <Fetch url="https://pokeapi.co/api/v2/pokemon/?limit=15">
+              {(data, error) => {
+                if (error) {
+                  return <div>{JSON.stringify(error)}</div>
                 }
-              </Grid>
-            </LoadingComponent>
+                return (
+                  <Grid>
+                    {data.results.map((p: any) => {
+                      return <PokeCard key={p.name} url={p.url} name={p.name} />
+                    })}
+                  </Grid>
+                );
+              }}
+            </Fetch>
           </Body>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Pokedex created by Brais Piñeiro
         </Footer>
-      </Layout>
+      </Layout >
     );
   }
 }
