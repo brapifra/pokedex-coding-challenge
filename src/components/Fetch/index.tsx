@@ -38,6 +38,9 @@ export default class Fetch extends React.PureComponent<Props, State> {
     const { url, config } = this.props;
     try {
       const res = await fetch(url, config);
+      if (res.status !== 200) {
+        throw Error();
+      }
       const data = await res.json();
       this.setState({ data, loading: false, error: null });
     } catch (error) {

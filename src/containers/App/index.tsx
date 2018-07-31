@@ -4,10 +4,13 @@ import Fetch from '../../components/Fetch';
 import PokeCard from '../../components/PokeCard';
 import styled from 'styled-components';
 
+const { Content, Footer } = Layout;
+
 const Body = styled.div`
-  background: #fff;
+  background: transparent;
   padding: 24px;
-  height: calc(100vh - 133px);
+  height: calc(100vh - 168px);
+  overflow-y: auto;
 `;
 
 const Grid = styled.div`
@@ -19,20 +22,20 @@ const Grid = styled.div`
   }
 `;
 
-const H1 = styled.h1`
+const CenteredHeader = styled.div`
+  background: transparent !important;
   text-align: center;
-  color: white;
+  background-color: white;
+  width: 100%;
 `;
-
-const { Header, Content, Footer } = Layout;
 
 class App extends React.Component<any> {
   public render() {
     return (
-      <Layout>
-        <Header>
-          <H1>Pokedex</H1>
-        </Header>
+      <Layout style={{ background: 'transparent' }}>
+        <CenteredHeader>
+          <img src="https://raw.githubusercontent.com/bloodstorms/pokedex/master/img/pokedex/logo-pokemon.png" />
+        </CenteredHeader>
         <Content>
           <Body>
             <Fetch url="https://pokeapi.co/api/v2/pokemon/?limit=15">
@@ -51,7 +54,7 @@ class App extends React.Component<any> {
             </Fetch>
           </Body>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer style={{ textAlign: 'center', background: 'transparent' }}>
           Pokedex created by Brais Piñeiro
         </Footer>
       </Layout >
