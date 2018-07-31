@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Spin as spin } from 'antd';
 import styled from "styled-components";
 
 interface Props {
@@ -13,7 +14,18 @@ const LoadingScreen = styled.div`
   filter: ${(props: Props) => props.loading ? 'blur(5px)' : 'blur(0px)'};
 `;
 
+const Spin = styled(spin)`
+  .ant-spin-dot i{
+    background-color: red
+  }
+`;
 
 export default function Loading(props: Props) {
-  return <LoadingScreen loading={props.loading}>{props.children}</LoadingScreen>;
+  return (
+    <LoadingScreen loading={props.loading}>
+      <div>
+        {props.loading ? <Spin /> : props.children}
+      </div>
+    </LoadingScreen>
+  );
 };

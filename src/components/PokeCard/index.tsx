@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Card } from 'antd';
 import LoadingComponent from '../LoadingComponent';
+import styled from 'styled-components';
 
 interface Props {
   url: any;
@@ -9,36 +10,39 @@ interface Props {
 
 interface State {
   loading: any;
-  data: any;
+  data?: any;
 }
+
+const ImageCard = styled.img`
+  width: 100%;
+  height: 100%;
+`;
 
 class PokeCard extends React.Component<Props, State> {
   public state: State = {
     loading: true,
-    data: {
-      name: "Loading Pokemon"
-    }
   }
   public async componentDidMount() {
     const res = await fetch(this.props.url);
     const data = await res.json();
-    this.setState({ data, loading: false });
+    this.setState({ data });
   }
   public render() {
-    console.log(this.state.data);
+    const { data } = this.state;
+    const { name } = this.props;
     return (
-      <LoadingComponent loading={this.state.loading}>
-        <Card>
-          {this.state.data ?
-            <div>
-              <img src="d" />
-              {this.state.data.name}
-            </div>
-            :
-            null}
-        </Card>
-      </LoadingComponent>
+      <Card>
+        <LoadingComponent loading={this.state.loading}>
+          <ImageCard src={data ? data.sprites.front_default : ""} onLoad={this.onImageLoad} />
+        </LoadingComponent>
+        <span>
+          {data ? data.name : (name || "Loading Pokemon...")}
+        </span>
+      </Card>
     );
+  }
+  private onImageLoad = () => {
+    this.setState({ loading: false });
   }
 }
 
