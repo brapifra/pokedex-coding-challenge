@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card } from 'antd';
+import { Card as card } from 'antd';
 import Fetch from '../Fetch';
 import styled from 'styled-components';
 
@@ -13,6 +13,12 @@ const ImageCard = styled.img`
   height: 100%;
 `;
 
+const Card = styled(card)`
+  .ant-card-body {
+    height: 100%;
+  }
+`
+
 class PokeCard extends React.Component<Props> {
   public render() {
     const { name } = this.props;
@@ -22,7 +28,7 @@ class PokeCard extends React.Component<Props> {
           {
             (data, error) => {
               if (error) {
-                return <div>{JSON.stringify(error)}</div>;
+                return <div>Error</div>;
               }
               return (
                 <ImageCard

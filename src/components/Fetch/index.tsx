@@ -19,11 +19,14 @@ const LoadingScreen = styled.div`
   width: 100%;
   height: 100%;
   filter: ${(props: any) => props.loading ? 'blur(5px)' : 'blur(0px)'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Spin = styled(spin)`
   .ant-spin-dot i{
-    background-color: red
+    background-color: red;
   }
 `;
 

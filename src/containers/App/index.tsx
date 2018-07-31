@@ -4,13 +4,10 @@ import Fetch from '../../components/Fetch';
 import PokeCard from '../../components/PokeCard';
 import styled from 'styled-components';
 
-interface State {
-  data?: any;
-  loading: boolean;
-}
 const Body = styled.div`
   background: #fff;
   padding: 24px;
+  height: calc(100vh - 133px);
 `;
 
 const Grid = styled.div`
@@ -29,11 +26,7 @@ const H1 = styled.h1`
 
 const { Header, Content, Footer } = Layout;
 
-class App extends React.Component<any, State> {
-  public state: State = {
-    data: JSON.parse(localStorage.getItem("pokemons") || "{}"),
-    loading: true
-  }
+class App extends React.Component<any> {
   public render() {
     return (
       <Layout>
@@ -45,7 +38,7 @@ class App extends React.Component<any, State> {
             <Fetch url="https://pokeapi.co/api/v2/pokemon/?limit=15">
               {(data, error) => {
                 if (error) {
-                  return <div>{JSON.stringify(error)}</div>
+                  return <div>Error</div>
                 }
                 return (
                   <Grid>
