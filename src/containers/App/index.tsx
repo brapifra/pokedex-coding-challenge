@@ -1,13 +1,22 @@
 import * as React from 'react';
+import Fetch from '../../hocs/Fetch';
 
-class App extends React.Component {
+interface Props {
+  data: any;
+}
+
+class App extends React.Component<Props> {
   public render() {
     return (
       <div>
-        Hi!
+        {
+          this.props.data.results.map((p: any) => {
+            return <div key={p.name}>{p.name}</div>;
+          })
+        }
       </div>
     );
   }
 }
 
-export default App;
+export default Fetch(App)('https://pokeapi.co/api/v2/pokemon/');
