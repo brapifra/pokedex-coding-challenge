@@ -1,26 +1,28 @@
 import * as React from 'react';
-import { Layout } from 'antd';
-import Fetch from '../../components/Fetch';
+import Fetch, { Loading } from '../../components/Fetch';
 import PokeCard from '../../components/PokeCard';
 import PokeInfo from '../../components/PokeInfo';
 import styled from 'styled-components';
 
-const { Content, Footer } = Layout;
-
 const Body = styled.div`
   background: transparent;
   padding: 24px;
-  height: calc(100vh - 232px);
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: 70%;
+  overflow: hidden;
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(0,10%));
+  height: 100%;
+  grid-template-columns: repeat(5, auto);
+  grid-template-rows: repeat(2, 50%);
   grid-gap: 15px;
+  padding: 0 80px;
   @media only screen and (max-width: 768px) {
     grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    grid-gap: 50px;
+    padding: 0;
   }
 `;
 
@@ -29,8 +31,20 @@ const CenteredHeader = styled.div`
   text-align: center;
   background-color: white;
   width: 100%;
-  margin: 32px 0;
+  height: 20%;
+  padding: 32px 0;
+  @media only screen and (max-width: 768px) {
+    padding: 16px 0;
+  }
 `;
+
+const CenteredFooter = styled.div`
+    background: transparent;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
 
 interface State {
   selectedPokemon: any;
@@ -42,41 +56,42 @@ class App extends React.Component<any, State> {
   }
   public render() {
     return (
-      <Layout style={{ background: 'transparent' }}>
+      <div style={{ background: 'transparent', height: '100%', margin: 0 }}>
         <CenteredHeader>
-          <img src="https://raw.githubusercontent.com/bloodstorms/pokedex/master/img/pokedex/logo-pokemon.png" />
+          <img height="100%" src="https://raw.githubusercontent.com/bloodstorms/pokedex/master/img/pokedex/logo-pokemon.png" />
         </CenteredHeader>
-        <Content>
-          <Body>
-            <Fetch url="https://pokeapi.co/api/v2/pokemon/?limit=15">
-              {(data, error) => {
-                if (error) {
-                  return <div>Error</div>
-                }
-                return (
-                  <Grid>
-                    {data.results.map((p: any) => (
-                      <PokeCard
-                        key={p.name}
-                        url={p.url}
-                        name={p.name}
-                        onClick={this.selectPokemon}
-                      />
-                    ))}
-                  </Grid>
-                );
-              }}
-            </Fetch>
-            <PokeInfo
-              pokemon={this.state.selectedPokemon}
-              onClose={this.deselectPokemon}
-            />
-          </Body>
-        </Content>
-        <Footer style={{ textAlign: 'center', background: 'transparent' }}>
-          Pokedex created by Brais Piñeiro
-        </Footer>
-      </Layout >
+        <Body>
+          <Fetch url="https://pokeapi.co/api/v2/pokemon/?limit=10">
+            {(loading, data, error) => {
+              if (loading) {
+                return <Loading />
+              }
+              if (error) {
+                return <div>Error</div>
+              }
+              return (
+                <Grid>
+                  {data.results.map((p: any) => (
+                    <PokeCard
+                      key={p.name}
+                      url={p.url}
+                      name={p.name}
+                      onClick={this.selectPokemon}
+                    />
+                  ))}
+                </Grid>
+              );
+            }}
+          </Fetch>
+          <PokeInfo
+            pokemon={this.state.selectedPokemon}
+            onClose={this.deselectPokemon}
+          />
+        </Body>
+        <CenteredFooter>
+          <span>Pokedex created by Brais Piñeiro</span>
+        </CenteredFooter>
+      </div>
     );
   }
 

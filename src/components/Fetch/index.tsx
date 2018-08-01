@@ -3,7 +3,7 @@ import { Spin as spin } from 'antd';
 import styled from "styled-components";
 
 interface Props {
-  children: (data: any, error: any) => React.ReactNode;
+  children: (loading: boolean, data: any, error: any) => React.ReactNode;
   url: string;
   config?: any;
 }
@@ -30,6 +30,10 @@ const Spin = styled(spin)`
   }
 `;
 
+export const Loading = ({ children }: { children?: any }) => (
+  <LoadingScreen loading={true} ><Spin />{children}</LoadingScreen>
+);
+
 export default class Fetch extends React.PureComponent<Props, State> {
   public state: State = {
     loading: true
@@ -48,9 +52,6 @@ export default class Fetch extends React.PureComponent<Props, State> {
     }
   }
   public render() {
-    if (this.state.loading) {
-      return <LoadingScreen loading={true} ><Spin /></LoadingScreen>;
-    }
-    return this.props.children(this.state.data, this.state.error);
+    return this.props.children(this.state.loading, this.state.data, this.state.error);
   }
 }

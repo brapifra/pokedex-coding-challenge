@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card as card } from 'antd';
-import Fetch from '../Fetch';
+import Fetch, { Loading } from '../Fetch';
 import styled from 'styled-components';
 
 interface Props {
@@ -10,7 +10,6 @@ interface Props {
 }
 
 const ImageCard = styled.img`
-  width: 100%;
   height: 100%;
 `;
 
@@ -20,9 +19,16 @@ const Card = styled(card)`
     height: 100%;
     text-align: center;
     font-weight: bold;
+    display: flex;
+    flex-direction: column;
   }
   &:hover{
     transform: scale(1.1);
+  }
+  @media only screen and (max-width: 768px) {
+    &:hover{
+      transform: scale(1);
+    }
   }
 `
 
@@ -38,7 +44,14 @@ class PokeCard extends React.Component<Props> {
       <Card {...cardProps}>
         <Fetch url={this.props.url}>
           {
-            (data, error) => {
+            (loading, data, error) => {
+              if (loading) {
+                return (
+                  <Loading>
+                    <ImageCard />
+                  </Loading>
+                )
+              }
               if (error) {
                 return <div>Error</div>;
               }
