@@ -14,11 +14,11 @@ interface State {
   error?: any;
 }
 
-const LoadingScreen = styled.div`
+export const BlurredScreen = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  filter: ${(props: any) => props.loading ? 'blur(5px)' : 'blur(0px)'};
+  filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,7 +31,7 @@ const Spin = styled(spin)`
 `;
 
 export const Loading = ({ children }: { children?: any }) => (
-  <LoadingScreen loading={true} ><Spin />{children}</LoadingScreen>
+  <BlurredScreen><Spin />{children}</BlurredScreen>
 );
 
 export default class Fetch extends React.PureComponent<Props, State> {
@@ -67,7 +67,7 @@ export default class Fetch extends React.PureComponent<Props, State> {
     try {
       const res = await fetch(url, config);
       if (res.status !== 200) {
-        throw Error();
+        throw new Error('Error fetching data');
       }
       const data = await res.json();
       if (this.mounted) {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { message } from 'antd';
 import Fetch, { Loading } from '../../components/Fetch';
 import styled from 'styled-components';
 import FilterableGrid from '../../components/FilterableGrid';
@@ -70,7 +71,8 @@ class App extends React.Component<any, State> {
                 );
               }
               if (error) {
-                return <div>Error</div>
+                message.error(error.message, 10000);
+                return  <Loading />;
               }
               return (
                 <Carousel onPrevious={this.previous} onNext={this.next} position={this.state.offset}>

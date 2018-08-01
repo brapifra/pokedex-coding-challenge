@@ -39,9 +39,15 @@ const IconContainer = styled.div`
     font-size: 32px;
   }
 
-  &: hover{
+  &:hover{
   transform: scale(1.3);
-}
+  }
+
+  @media only screen and (max-width: 768px) {
+    &:hover{
+      transform: scale(1);
+    }
+  }
 `;
 
 export default function Carousel(props: Props) {

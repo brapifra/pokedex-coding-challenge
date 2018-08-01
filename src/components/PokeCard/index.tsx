@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Card as card } from 'antd';
-import Fetch, { Loading } from '../Fetch';
+import { Card as card, Icon } from 'antd';
+import Fetch, { Loading, BlurredScreen } from '../Fetch';
 import styled from 'styled-components';
 
 interface Props {
@@ -59,7 +59,11 @@ class PokeCard extends React.Component<Props> {
                 )
               }
               if (error) {
-                return <div>Error</div>;
+                return (
+                  <BlurredScreen>
+                    <Icon type="close" style={{ fontSize: '1600%' }} />
+                  </BlurredScreen>
+                );
               }
               this.pokemon = data;
               return (

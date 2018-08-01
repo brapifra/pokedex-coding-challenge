@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Card as card, Carousel, Icon } from 'antd';
 import styled from 'styled-components';
 import PokeType from '../PokeType';
+import Fetch from '../Fetch';
 
 interface Props {
   pokemon?: any;
@@ -132,10 +133,26 @@ class PokeInfo extends React.Component<Props> {
                   </span>
                 </InfoRow>
                 <InfoRow>
-                  <span>Name:</span>
-                  <span>
-                    {pokemon.name}
-                  </span>
+                  <span>Evolves from:</span>
+                  <Fetch url={pokemon.species.url}>
+                    {
+                      (loading, data, error) => {
+                        if (loading) {
+                          return <span>Loading...</span>;
+                        }
+                        if (error) {
+                          return <span>Error</span>;
+                        }
+                        return (
+                          <span>
+                            {data.evolves_from_species ?
+                              data.evolves_from_species.name : 'None'
+                            }
+                          </span>
+                        );
+                      }
+                    }
+                  </Fetch>
                 </InfoRow>
               </InfoContainer>
             </Card>
