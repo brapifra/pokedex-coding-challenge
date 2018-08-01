@@ -25,6 +25,7 @@ const Container = styled.div`
   @media only screen and (max-width: 768px) {
     max-height: ${({ visible }: { visible: any }) => visible ? "100%" : "0"};
   }
+  z-index: 5;
 `;
 
 const Card = styled(card)`

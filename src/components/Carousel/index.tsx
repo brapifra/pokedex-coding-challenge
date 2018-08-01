@@ -31,7 +31,7 @@ const IconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: ${(props: ICProps) => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props: ICProps) => props.disabled ? 'wait' : 'pointer'};
 
   .anticon {
     color: #c00d0d;

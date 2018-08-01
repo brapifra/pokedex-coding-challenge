@@ -7,6 +7,7 @@ interface Props {
   url: any;
   name: string;
   onClick?: (pokemon: any) => void;
+  visible: boolean;
 }
 
 const ImageCard = styled.img`
@@ -33,13 +34,14 @@ const Card = styled(card)`
     padding: 0;
   }
   }
+  display: ${({ visible }: { visible: boolean }) => visible ? 'block' : 'none'};
 `
 
 class PokeCard extends React.Component<Props> {
   private pokemon: any;
   public render() {
-    const { name } = this.props;
-    const cardProps: any = {};
+    const { name, visible } = this.props;
+    const cardProps: any = { visible: visible ? 1 : 0 };
     if (this.props.onClick) {
       cardProps.onClick = this.onClick;
     }
