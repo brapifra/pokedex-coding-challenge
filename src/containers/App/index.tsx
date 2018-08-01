@@ -1,28 +1,17 @@
 import * as React from 'react';
 import Fetch, { Loading } from '../../components/Fetch';
-import PokeCard from '../../components/PokeCard';
-import PokeInfo from '../../components/PokeInfo';
 import styled from 'styled-components';
+import FilterableGrid from '../../components/FilterableGrid';
+import Carousel from '../../components/Carousel';
+import PokeInfo from '../../components/PokeInfo';
 
 const Body = styled.div`
   background: transparent;
   padding: 24px;
   height: 70%;
   overflow: hidden;
-`;
-
-const Grid = styled.div`
-  display: grid;
-  height: 100%;
-  grid-template-columns: repeat(5, auto);
-  grid-template-rows: repeat(2, 50%);
-  grid-gap: 15px;
-  padding: 0 80px;
   @media only screen and (max-width: 768px) {
-    grid-template-columns: 100%;
-    grid-template-rows: 100%;
-    grid-gap: 50px;
-    padding: 0;
+    padding: 10px;
   }
 `;
 
@@ -48,41 +37,41 @@ const CenteredFooter = styled.div`
 
 interface State {
   selectedPokemon: any;
+  offset: number;
 }
 
 class App extends React.Component<any, State> {
   public state: State = {
-    selectedPokemon: null
+    selectedPokemon: null,
+    offset: 0
   }
+  private API_LIMIT = window.matchMedia("only screen and (max-width: 768px)").matches ? 4 : 10;
   public render() {
+    const url = `https://pokeapi.co/api/v2/pokemon/?limit=${this.API_LIMIT}&offset=${this.state.offset * this.API_LIMIT}`;
     return (
       <div style={{ background: 'transparent', height: '100%', margin: 0 }}>
         <CenteredHeader>
           <img height="100%" src="https://raw.githubusercontent.com/bloodstorms/pokedex/master/img/pokedex/logo-pokemon.png" />
         </CenteredHeader>
         <Body>
-          <Fetch url="https://pokeapi.co/api/v2/pokemon/?limit=10">
-            {(loading, data, error) => {
-              if (loading) {
-                return <Loading />
-              }
-              if (error) {
-                return <div>Error</div>
-              }
-              return (
-                <Grid>
-                  {data.results.map((p: any) => (
-                    <PokeCard
-                      key={p.name}
-                      url={p.url}
-                      name={p.name}
-                      onClick={this.selectPokemon}
-                    />
-                  ))}
-                </Grid>
-              );
-            }}
-          </Fetch>
+          <Carousel onPrevious={this.previous} onNext={this.next} position={this.state.offset}>
+            <Fetch url={url}>
+              {(loading, data, error) => {
+                if (loading) {
+                  return <Loading />
+                }
+                if (error) {
+                  return <div>Error</div>
+                }
+                return (
+                  <FilterableGrid
+                    data={data.results}
+                    onClick={this.selectPokemon}
+                  />
+                );
+              }}
+            </Fetch>
+          </Carousel>
           <PokeInfo
             pokemon={this.state.selectedPokemon}
             onClose={this.deselectPokemon}
@@ -101,6 +90,17 @@ class App extends React.Component<any, State> {
 
   private deselectPokemon = () => {
     this.setState({ selectedPokemon: null });
+  }
+
+  private previous = () => {
+    if (this.state.offset === 0) {
+      return;
+    }
+    this.setState({ offset: this.state.offset - 1 });
+  }
+
+  private next = () => {
+    this.setState({ offset: this.state.offset + 1 });
   }
 }
 

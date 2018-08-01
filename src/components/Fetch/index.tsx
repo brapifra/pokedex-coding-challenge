@@ -38,8 +38,26 @@ export default class Fetch extends React.PureComponent<Props, State> {
   public state: State = {
     loading: true
   }
-  public async componentDidMount() {
-    const { url, config } = this.props;
+
+  public componentDidMount() {
+    this.fetchData();
+  }
+
+  public componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.url === this.props.url) {
+      return;
+    }
+    if (!this.state.loading) {
+      this.setState({ loading: true }, () => this.fetchData(nextProps));
+    }
+  }
+
+  public render() {
+    return this.props.children(this.state.loading, this.state.data, this.state.error);
+  }
+
+  private async fetchData(props?: Props) {
+    const { url, config } = props || this.props;
     try {
       const res = await fetch(url, config);
       if (res.status !== 200) {
@@ -50,8 +68,5 @@ export default class Fetch extends React.PureComponent<Props, State> {
     } catch (error) {
       this.setState({ data: null, loading: false, error });
     }
-  }
-  public render() {
-    return this.props.children(this.state.loading, this.state.data, this.state.error);
   }
 }

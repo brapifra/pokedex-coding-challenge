@@ -29,6 +29,9 @@ const Card = styled(card)`
     &:hover{
       transform: scale(1);
     }
+    .ant-card-body {
+    padding: 0;
+  }
   }
 `
 
@@ -40,6 +43,7 @@ class PokeCard extends React.Component<Props> {
     if (this.props.onClick) {
       cardProps.onClick = this.onClick;
     }
+    const mobileMode = window.matchMedia("only screen and (max-width: 768px)").matches;
     return (
       <Card {...cardProps}>
         <Fetch url={this.props.url}>
@@ -64,9 +68,14 @@ class PokeCard extends React.Component<Props> {
             }
           }
         </Fetch>
-        <span>
-          {name}
-        </span>
+        {
+          mobileMode ?
+            null
+            :
+            <span>
+              {name}
+            </span>
+        }
       </Card>
     );
   }
