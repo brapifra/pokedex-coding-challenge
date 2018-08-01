@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Layout } from 'antd';
 import Fetch from '../../components/Fetch';
 import PokeCard from '../../components/PokeCard';
+import PokeInfo from '../../components/PokeInfo';
 import styled from 'styled-components';
 
 const { Content, Footer } = Layout;
@@ -9,13 +10,14 @@ const { Content, Footer } = Layout;
 const Body = styled.div`
   background: transparent;
   padding: 24px;
-  height: calc(100vh - 168px);
+  height: calc(100vh - 232px);
   overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(10, minmax(0,10%));
+  grid-template-columns: repeat(auto-fill, minmax(0,10%));
   grid-gap: 15px;
   @media only screen and (max-width: 768px) {
     grid-template-columns: 100%;
@@ -27,9 +29,17 @@ const CenteredHeader = styled.div`
   text-align: center;
   background-color: white;
   width: 100%;
+  margin: 32px 0;
 `;
 
-class App extends React.Component<any> {
+interface State {
+  selectedPokemon: any;
+}
+
+class App extends React.Component<any, State> {
+  public state: State = {
+    selectedPokemon: null
+  }
   public render() {
     return (
       <Layout style={{ background: 'transparent' }}>
@@ -45,13 +55,22 @@ class App extends React.Component<any> {
                 }
                 return (
                   <Grid>
-                    {data.results.map((p: any) => {
-                      return <PokeCard key={p.name} url={p.url} name={p.name} />
-                    })}
+                    {data.results.map((p: any) => (
+                      <PokeCard
+                        key={p.name}
+                        url={p.url}
+                        name={p.name}
+                        onClick={this.selectPokemon}
+                      />
+                    ))}
                   </Grid>
                 );
               }}
             </Fetch>
+            <PokeInfo
+              pokemon={this.state.selectedPokemon}
+              onClose={this.deselectPokemon}
+            />
           </Body>
         </Content>
         <Footer style={{ textAlign: 'center', background: 'transparent' }}>
@@ -59,6 +78,14 @@ class App extends React.Component<any> {
         </Footer>
       </Layout >
     );
+  }
+
+  private selectPokemon = (pokemon: any) => {
+    this.setState({ selectedPokemon: pokemon });
+  }
+
+  private deselectPokemon = () => {
+    this.setState({ selectedPokemon: null });
   }
 }
 
