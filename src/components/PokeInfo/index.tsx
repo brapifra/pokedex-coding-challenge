@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Card as card, Carousel, Icon } from 'antd';
 import styled from 'styled-components';
+import PokeType from '../PokeType';
 
 interface Props {
   pokemon?: any;
@@ -20,6 +21,9 @@ const Container = styled.div`
   height: 100%;
   max-height: ${({ visible }: { visible: any }) => visible ? "20vh" : "0"};
 	transition: max-height 1s;
+  @media only screen and (max-width: 768px) {
+    max-height: ${({ visible }: { visible: any }) => visible ? "30vh" : "0"};
+  }
 `;
 
 const Card = styled(card)`
@@ -35,11 +39,11 @@ const Card = styled(card)`
   }
 
   .ant-carousel .slick-dots li button {
-    background: red;
+    background: grey;
   }
 
   .ant-carousel .slick-dots li.slick-active button {
-    background: red;
+    background: grey;
   }
 
   @media only screen and (max-width: 768px) {
@@ -66,6 +70,20 @@ const CloseIcon = styled(Icon)`
   }
 `;
 
+const InfoRow = styled.div`
+  display: flex;
+  margin-bottom: 5px;
+  & > span{
+    flex: 1;
+  }
+  & > span:first-child{
+    font-weight: bold;
+  }
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 5px !important;
+  }
+`;
+
 class PokeInfo extends React.Component<Props> {
   public render() {
     const { pokemon } = this.props;
@@ -77,15 +95,39 @@ class PokeInfo extends React.Component<Props> {
               <CloseIcon type="close" onClick={this.props.onClose} />
               <Carousel autoplay={true}>
                 {
-                  Object.keys(pokemon.sprites).filter((sprite) => pokemon.sprites[sprite] !== null).map(sprite => (
-                    <ImageCard src={pokemon.sprites[sprite]} />
-                  ))
+                  Object.keys(pokemon.sprites)
+                    .filter((sprite) => pokemon.sprites[sprite] !== null)
+                    .map((sprite, index) => (
+                      <ImageCard src={pokemon.sprites[sprite]} key={index} />
+                    ))
                 }
               </Carousel>
               <InfoContainer>
-                <span>
-                  {pokemon.name}
-                </span>
+                <InfoRow style={{ marginBottom: 32 }}>
+                  {
+                    pokemon.types.map(({ type }: { type: any }) => (
+                      <PokeType key={type.name} type={type.name} />
+                    ))
+                  }
+                </InfoRow>
+                <InfoRow>
+                  <span>ID:</span>
+                  <span>
+                    {pokemon.id}
+                  </span>
+                </InfoRow>
+                <InfoRow>
+                  <span>Name:</span>
+                  <span>
+                    {pokemon.name}
+                  </span>
+                </InfoRow>
+                <InfoRow>
+                  <span>Name:</span>
+                  <span>
+                    {pokemon.name}
+                  </span>
+                </InfoRow>
               </InfoContainer>
             </Card>
             :
