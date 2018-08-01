@@ -38,17 +38,23 @@ export default class Fetch extends React.PureComponent<Props, State> {
   public state: State = {
     loading: true
   }
+  private mounted: boolean = false;
 
   public componentDidMount() {
+    this.mounted = true;
     this.fetchData();
   }
 
-  public componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.url === this.props.url) {
+  public componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  public componentDidUpdate(prevProps: Props) {
+    if (prevProps.url === this.props.url) {
       return;
     }
-    if (!this.state.loading) {
-      this.setState({ loading: true }, () => this.fetchData(nextProps));
+    if (!this.state.loading && this.mounted) {
+      this.setState({ loading: true }, () => this.fetchData());
     }
   }
 
@@ -56,17 +62,21 @@ export default class Fetch extends React.PureComponent<Props, State> {
     return this.props.children(this.state.loading, this.state.data, this.state.error);
   }
 
-  private async fetchData(props?: Props) {
-    const { url, config } = props || this.props;
+  private async fetchData() {
+    const { url, config } = this.props;
     try {
       const res = await fetch(url, config);
       if (res.status !== 200) {
         throw Error();
       }
       const data = await res.json();
-      this.setState({ data, loading: false, error: null });
+      if (this.mounted) {
+        this.setState({ data, loading: false, error: null });
+      }
     } catch (error) {
-      this.setState({ data: null, loading: false, error });
+      if (this.mounted) {
+        this.setState({ data: null, loading: false, error });
+      }
     }
   }
 }

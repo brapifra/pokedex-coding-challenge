@@ -9,8 +9,10 @@ interface Props {
 }
 
 const ImageCard = styled.img`
-  max-height: 15vh;
-  max-width: 100%;
+  max-width: 33%;
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+  }
 `;
 
 const Container = styled.div`
@@ -18,11 +20,10 @@ const Container = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100%;
-  max-height: ${({ visible }: { visible: any }) => visible ? "20vh" : "0"};
+  max-height: ${({ visible }: { visible: any }) => visible ? "100%" : "0"};
 	transition: max-height 1s;
   @media only screen and (max-width: 768px) {
-    max-height: ${({ visible }: { visible: any }) => visible ? "30vh" : "0"};
+    max-height: ${({ visible }: { visible: any }) => visible ? "100%" : "0"};
   }
 `;
 
@@ -36,6 +37,10 @@ const Card = styled(card)`
   .ant-card-body .ant-carousel {
     grid-column: 1;
     grid-row: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .ant-carousel .slick-dots li button {
@@ -49,6 +54,9 @@ const Card = styled(card)`
   @media only screen and (max-width: 768px) {
     .ant-carousel .slick-dots li {
       display: none;
+    }
+    .ant-card-body {
+      padding: 24px 24px 24px 12px;
     }
   }
 `;

@@ -48,30 +48,40 @@ class App extends React.Component<any, State> {
   private API_LIMIT = window.matchMedia("only screen and (max-width: 768px)").matches ? 4 : 10;
   public render() {
     const url = `https://pokeapi.co/api/v2/pokemon/?limit=${this.API_LIMIT}&offset=${this.state.offset * this.API_LIMIT}`;
+    console.log(url);
     return (
       <div style={{ background: 'transparent', height: '100%', margin: 0 }}>
         <CenteredHeader>
           <img height="100%" src="https://raw.githubusercontent.com/bloodstorms/pokedex/master/img/pokedex/logo-pokemon.png" />
         </CenteredHeader>
         <Body>
-          <Carousel onPrevious={this.previous} onNext={this.next} position={this.state.offset}>
-            <Fetch url={url}>
-              {(loading, data, error) => {
-                if (loading) {
-                  return <Loading />
-                }
-                if (error) {
-                  return <div>Error</div>
-                }
+          <Fetch url={url}>
+            {(loading, data, error) => {
+              if (loading) {
                 return (
+                  <Carousel
+                    onPrevious={this.previous}
+                    onNext={this.next}
+                    position={this.state.offset}
+                    disabled={true}
+                  >
+                    <Loading />
+                  </Carousel>
+                );
+              }
+              if (error) {
+                return <div>Error</div>
+              }
+              return (
+                <Carousel onPrevious={this.previous} onNext={this.next} position={this.state.offset}>
                   <FilterableGrid
                     data={data.results}
                     onClick={this.selectPokemon}
                   />
-                );
-              }}
-            </Fetch>
-          </Carousel>
+                </Carousel>
+              );
+            }}
+          </Fetch>
           <PokeInfo
             pokemon={this.state.selectedPokemon}
             onClose={this.deselectPokemon}

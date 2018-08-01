@@ -23,7 +23,7 @@ const Card = styled(card)`
     flex-direction: column;
   }
   &:hover{
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
   @media only screen and (max-width: 768px) {
     &:hover{
