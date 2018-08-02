@@ -50,6 +50,9 @@ const IconContainer = styled.div`
   }
 `;
 
+/**
+ * Simple carousel
+ */
 export default function Carousel(props: Props) {
   return (
     <Container>

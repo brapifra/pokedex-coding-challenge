@@ -34,6 +34,9 @@ export const Loading = ({ children }: { children?: any }) => (
   <BlurredScreen><Spin />{children}</BlurredScreen>
 );
 
+/**
+ * Logic component that fetches data from an url and renders the children passed
+ */
 export default class Fetch extends React.PureComponent<Props, State> {
   public state: State = {
     loading: true

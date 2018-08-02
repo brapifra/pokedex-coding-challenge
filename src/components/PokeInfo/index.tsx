@@ -94,6 +94,9 @@ const InfoRow = styled.div`
   }
 `;
 
+/**
+ * Shows info about the selected pokemon and fetches its evolution data.
+ */
 class PokeInfo extends React.Component<Props> {
   public render() {
     const { pokemon } = this.props;

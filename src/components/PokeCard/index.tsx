@@ -36,7 +36,9 @@ const Card = styled(card)`
   }
   display: ${({ visible }: { visible: boolean }) => visible ? 'block' : 'none'};
 `
-
+/**
+ * Shows an image preview of a pokemon and fetches its info.
+ */
 class PokeCard extends React.Component<Props> {
   private pokemon: any;
   public render() {

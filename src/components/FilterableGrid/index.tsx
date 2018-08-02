@@ -60,6 +60,9 @@ interface State {
   filter: string;
 }
 
+/**
+ * Mobile-friendly grid of PokeCards
+ */
 class FilterableGrid extends React.Component<Props, State> {
   public state: State = {
     selectedPokemon: null,

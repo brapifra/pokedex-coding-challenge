@@ -35,6 +35,9 @@ const Container = styled.span`
   text-align: center;
 `;
 
+/**
+ * Colourised span based on the pokemon type.
+ */
 export default function PokeType(props: Props) {
   return (
     <Container color={ColorType[props.type]}>{props.type.toLocaleUpperCase()}</Container>

@@ -47,6 +47,12 @@ interface State {
   offset: number;
 }
 
+/**
+ * Main container. 
+ * It fetches the list of pokemons based on the current offset and passes the data to the FilterableGrid component.
+ * If some pokemon is selected, this component passes the pokemon data to the PokeInfo component.
+ */
+
 class App extends React.Component<any, State> {
   public state: State = {
     selectedPokemon: null,
