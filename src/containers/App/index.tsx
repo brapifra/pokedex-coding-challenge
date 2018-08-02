@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { message } from 'antd';
+import { message, Icon } from 'antd';
 import Fetch, { Loading } from '../../components/Fetch';
 import styled from 'styled-components';
 import FilterableGrid from '../../components/FilterableGrid';
@@ -34,6 +34,12 @@ const CenteredFooter = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    & > span:first-child{
+      margin-right: 5px;
+    }
+    & > *{
+      cursor: pointer;
+    }
 `
 
 interface State {
@@ -71,7 +77,7 @@ class App extends React.Component<any, State> {
               }
               if (error) {
                 message.error(error.message, 10000);
-                return  <Loading />;
+                return <Loading />;
               }
               return (
                 <Carousel onPrevious={this.previous} onNext={this.next} position={this.state.offset}>
@@ -89,7 +95,8 @@ class App extends React.Component<any, State> {
           />
         </Body>
         <CenteredFooter>
-          <span>Pokedex created by Brais Piñeiro</span>
+          <span onClick={this.goToGitHub}>Pokedex created by Brais Piñeiro</span>
+          <Icon type="github" onClick={this.goToGitHub} />
         </CenteredFooter>
       </div>
     );
@@ -112,6 +119,10 @@ class App extends React.Component<any, State> {
 
   private next = () => {
     this.setState({ offset: this.state.offset + 1 });
+  }
+
+  private goToGitHub = () => {
+    window.open('https://github.com/brapifra/pokedex-coding-challenge', '_blank');
   }
 }
 
